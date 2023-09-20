@@ -508,16 +508,21 @@ var _player = require("@vimeo/player");
 var _playerDefault = parcelHelpers.interopDefault(_player);
 var _lodashThrottle = require("lodash.throttle");
 var _lodashThrottleDefault = parcelHelpers.interopDefault(_lodashThrottle);
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", ()=>{
     const iframe = document.querySelector("#vimeo-player");
     const player = new (0, _playerDefault.default)(iframe);
     const savedTime = localStorage.getItem("videoplayer-current-time");
-    if (savedTime) player.setCurrentTime(savedTime).catch((error)=>{
+    if (savedTime) try {
+        player.setCurrentTime(savedTime);
+    } catch (error) {
         console.error("Failed to set saved time:", error);
+    }
+    const throttleUpdate = (0, _lodashThrottleDefault.default)((seconds)=>{
+        localStorage.setItem("videoplayer-current-time", seconds);
+    }, 1000);
+    player.on("timeupdate", ({ seconds  })=>{
+        throttleUpdate(seconds);
     });
-    player.on("timeupdate", (0, _lodashThrottleDefault.default)(function(data) {
-        localStorage.setItem("videoplayer-current-time", data.seconds);
-    }, 1000));
 });
 
 },{"@vimeo/player":"kmmUG","lodash.throttle":"bGJVT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kmmUG":[function(require,module,exports) {
