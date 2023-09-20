@@ -504,6 +504,7 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"6XVkV":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+// Add imports above this line
 var _galleryItems = require("./gallery-items");
 var _simplelightbox = require("simplelightbox");
 var _simplelightboxDefault = parcelHelpers.interopDefault(_simplelightbox);
@@ -522,24 +523,14 @@ const createGalleryMarkup = (item)=>{
       </a>
     </li>`;
 };
-const gallery = new (0, _simplelightboxDefault.default)(".gallery a", {
-    captionsData: "alt"
-});
-const galleryMarkup = (0, _galleryItems.galleryItems).map(createGalleryMarkup).join("");
-galleryElement.innerHTML = galleryMarkup;
-galleryElement.addEventListener("click", function(event1) {
-    event1.preventDefault();
-    const target = event1.target;
-    if (target.tagName !== "IMG") return;
-    const largeImageURL = target.dataset.source;
-    const instance = basicLightbox.create(`
-    <img src="${largeImageURL}" width="800" height="600">
-  `);
-    instance.show();
-    document.addEventListener("keydown", function(event) {
-        if (event.key === "Escape" && instance) instance.close();
+if (galleryElement) {
+    const galleryMarkup = (0, _galleryItems.galleryItems).map(createGalleryMarkup).join("");
+    galleryElement.innerHTML = galleryMarkup;
+    const lightbox = new (0, _simplelightboxDefault.default)(".gallery a", {
+        captionsData: "alt",
+        captionDelay: 250
     });
-});
+} else console.error("No element with class 'gallery' found.");
 
 },{"./gallery-items":"9C7dK","simplelightbox":"9ydBq","simplelightbox/dist/simple-lightbox.min.css":"kaxSc","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9C7dK":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
